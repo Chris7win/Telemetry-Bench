@@ -1,0 +1,214 @@
+:root {
+  --bg: #05070a;
+  --panel: #0f141b;
+  --panel-hi: #151b24;
+  --border: #232c38;
+  --text: #eef2f7;
+  --muted: #8b96a5;
+  --green: #35d07f;
+  --red: #ff5c5c;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: radial-gradient(ellipse at top, #101820 0%, #05070a 60%);
+  color: var(--text);
+  font-family: "Segoe UI", Roboto, sans-serif;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 30px;
+  overflow-y: auto;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.title { display: flex; align-items: center; gap: 14px; }
+h1 { font-size: 26px; font-weight: 700; margin: 0; letter-spacing: 0.3px; }
+
+.dot-pulse {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 0 rgba(53,208,127,0.6);
+  animation: pulse 1.6s infinite;
+  flex-shrink: 0;
+}
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(53,208,127,0.55); }
+  70%  { box-shadow: 0 0 0 14px rgba(53,208,127,0); }
+  100% { box-shadow: 0 0 0 0 rgba(53,208,127,0); }
+}
+
+.global-controls { display: flex; align-items: center; gap: 14px; font-size: 14px; }
+
+button {
+  background: #1f6feb; color: white; border: none;
+  border-radius: 8px; padding: 8px 16px; font-weight: 600;
+  font-size: 14px; cursor: pointer; transition: background 0.15s;
+}
+button:hover { background: #388bfd; }
+button.small { padding: 6px 14px; font-size: 13px; }
+
+.icon-btn { display: inline-flex; align-items: center; gap: 8px; }
+.icon-btn svg { flex-shrink: 0; }
+
+#channel-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  flex: 1;
+  min-height: 580px;
+}
+@media (max-width: 1100px) {
+  #channel-grid { grid-template-columns: 1fr; }
+}
+
+.channel-card {
+  background: linear-gradient(180deg, var(--panel-hi) 0%, var(--panel) 100%);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.channel-card .head {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 6px; flex-shrink: 0;
+}
+.channel-card .name { display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 700; }
+.channel-card .name svg { flex-shrink: 0; }
+.channel-card .status-dot {
+  width: 11px; height: 11px; border-radius: 50%; background: var(--red);
+  box-shadow: 0 0 8px var(--red); flex-shrink: 0;
+}
+.channel-card .status-dot.live { background: var(--green); box-shadow: 0 0 8px var(--green); }
+
+.channel-card .value-row {
+  display: flex; align-items: baseline; gap: 8px; margin: 6px 0 2px 0; flex-shrink: 0;
+}
+.channel-card .value {
+  font-family: "Consolas", monospace; font-size: 54px; font-weight: 800;
+  line-height: 1;
+}
+.channel-card .unit { font-size: 18px; color: var(--muted); }
+.channel-card .meta { color: var(--muted); font-size: 12px; margin-bottom: 4px; flex-shrink: 0; }
+.channel-card .window-tag { color: #5a6472; font-size: 11px; font-style: italic; margin-bottom: 10px; flex-shrink: 0; }
+
+.channel-card .chart {
+  width: 100%;
+  flex: 1;
+  min-height: 140px;
+  margin-bottom: 10px;
+}
+
+.channel-card .conn-row {
+  display: flex; gap: 8px; margin-bottom: 10px; flex-shrink: 0;
+}
+.channel-card input {
+  background: #0b0f14; border: 1px solid var(--border); border-radius: 6px;
+  color: var(--text); padding: 7px 9px; font-size: 13px; width: 100%;
+}
+.channel-card input.port { max-width: 84px; }
+
+.channel-card .actions { display: flex; gap: 8px; flex-shrink: 0; }
+.channel-card .actions button { flex: 1; }
+
+#statusBar {
+  margin-top: 16px; color: var(--muted); font-size: 13px; text-align: center;
+  flex-shrink: 0;
+}
+/* ============================================================
+   Sandbath card additions — heater alert badge + setpoint editor
+   (scoped to new classes only; other cards are unaffected)
+   ============================================================ */
+
+/* Heater ON/OFF alert badge (sits at the right of the value row) */
+.heater-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-left: auto; padding: 5px 11px; border-radius: 999px;
+  font-size: 12.5px; font-weight: 700; letter-spacing: 0.2px;
+  border: 1px solid var(--border); white-space: nowrap;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+.heater-badge svg { flex-shrink: 0; }
+.heater-badge.off {
+  background: rgba(139,150,165,0.08); color: var(--muted);
+  border-color: var(--border);
+}
+.heater-badge.on {
+  background: rgba(255,92,92,0.12); color: #ff8158;
+  border-color: rgba(255,92,92,0.5);
+  animation: heaterGlow 1.6s ease-in-out infinite;
+}
+@keyframes heaterGlow {
+  0%,100% { box-shadow: 0 0 6px rgba(255,92,92,0.18); }
+  50%     { box-shadow: 0 0 16px rgba(255,122,77,0.48); }
+}
+
+/* Heater setpoint editor panel */
+.setpoint-panel {
+  background: rgba(255,167,38,0.05);
+  border: 1px solid rgba(255,167,38,0.22);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+.setpoint-panel .sp-title {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 12.5px; font-weight: 700; color: #ffbf69;
+  margin-bottom: 8px;
+}
+.setpoint-panel .sp-title svg { flex-shrink: 0; }
+.setpoint-panel .sp-row {
+  display: flex; align-items: flex-end; gap: 8px; flex-wrap: wrap;
+}
+.setpoint-panel .sp-field {
+  display: flex; flex-direction: column; gap: 4px;
+  flex: 1; min-width: 108px;
+}
+.setpoint-panel .sp-label {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--muted); font-weight: 600;
+}
+.setpoint-panel .sp-label svg { flex-shrink: 0; }
+.setpoint-panel .sp-input-wrap {
+  display: flex; align-items: center; gap: 6px;
+  background: #0b0f14; border: 1px solid var(--border);
+  border-radius: 7px; padding: 0 10px;
+  transition: border-color 0.15s;
+}
+.setpoint-panel .sp-input-wrap:focus-within { border-color: #ffa726; }
+.setpoint-panel .sp-input {
+  background: transparent; border: none; color: var(--text);
+  font-family: "Consolas", monospace; font-size: 14px; font-weight: 600;
+  padding: 7px 0; width: 100%;
+}
+.setpoint-panel .sp-input:focus { outline: none; }
+.setpoint-panel .sp-unit { font-size: 12px; color: var(--muted); }
+.setpoint-panel .sp-apply {
+  background: #d98324; flex-shrink: 0; align-self: stretch;
+}
+.setpoint-panel .sp-apply:hover { background: #e8952f; }
+.setpoint-panel .sp-hint {
+  font-size: 10.5px; color: #7f8a99; margin-top: 7px; line-height: 1.35;
+}
+.setpoint-panel .sp-hint.err { color: #ff7a7a; }
+
+/* trim number-input spinners for a cleaner look */
+.setpoint-panel .sp-input::-webkit-outer-spin-button,
+.setpoint-panel .sp-input::-webkit-inner-spin-button {
+  -webkit-appearance: none; margin: 0;
+}
+.setpoint-panel .sp-input { -moz-appearance: textfield; }
